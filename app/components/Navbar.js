@@ -1,41 +1,18 @@
-"use client"; // Adding this to ensure the correct client-side behavior
-
-import { useState, useEffect } from "react";
+"use client"; // Ensuring client-side behavior
+import { useState } from "react";
 import Link from "next/link";
-import { FaSun, FaMoon, FaBars, FaTimes } from "react-icons/fa"; // Font Awesome icons
+import DarkModeToggler from "./DarkModeToggler"; // Import the DarkModeToggler component
+import { FaBars, FaTimes } from "react-icons/fa"; // Font Awesome icons
 
 const Navbar = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for toggling the menu
-
-  useEffect(() => {
-    // Check the saved theme in localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === "dark");
-    }
-  }, []);
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    // Save the current theme to localStorage
-    const newTheme = !isDarkMode ? "dark" : "light";
-    localStorage.setItem("theme", newTheme);
-
-    // Toggle dark class on the body
-    if (newTheme === "dark") {
-      document.body.classList.add("dark");
-    } else {
-      document.body.classList.remove("dark");
-    }
-  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   return (
-    <nav className="bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#380643] dark:to-[#0E1628] p-4 shadow-lg">
+    <nav className="bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#2f0539] dark:to-[#0d1323] p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white font-semibold text-xl animate-move">
           QuizArena
@@ -60,7 +37,7 @@ const Navbar = () => {
           <li>
             <Link href="/quiz" passHref>
               <span className="text-white hover:text-gray-300 dark:text-gray-300 dark:hover:text-white">
-                 Quiz
+                Quiz
               </span>
             </Link>
           </li>
@@ -82,7 +59,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <ul className="md:hidden absolute top-16 left-0 w-full bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#380643] dark:to-[#0E1628] p-4 space-y-4">
+          <ul className="md:hidden absolute top-16 left-0 w-full bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#380643] dark:to-[#0E1628] p-4 space-y-4 z-10">
             <li>
               <Link href="/" passHref>
                 <span
@@ -126,10 +103,8 @@ const Navbar = () => {
           </ul>
         )}
 
-        {/* Dark Mode Toggle */}
-        <button onClick={toggleDarkMode} className="text-white text-2xl">
-          {isDarkMode ? <FaMoon /> : <FaSun />}
-        </button>
+        {/* Dark Mode Toggle Component */}
+        <DarkModeToggler />
       </div>
     </nav>
   );
