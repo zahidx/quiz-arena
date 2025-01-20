@@ -60,7 +60,7 @@ const Navbar = () => {
           <li>
             <Link href="/quiz" passHref>
               <span className="text-white hover:text-gray-300 dark:text-gray-300 dark:hover:text-white">
-                Start Quiz
+                 Quiz
               </span>
             </Link>
           </li>
