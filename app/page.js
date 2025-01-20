@@ -1,6 +1,5 @@
 "use client";
-import Link from "next/link";
-import Footer from "./components/Footer";
+import Link from "next/link";;
 import { FaListAlt, FaRegCheckCircle, FaTrophy } from "react-icons/fa";
 import { FaStar, FaMedal } from "react-icons/fa"; // Add FaMedal here
 
@@ -131,10 +130,6 @@ const Home = () => {
     </Link>
   </div>
 </section>
-
-
-      {/* Footer Section */}
-      <Footer />
     </div>
   );
 };
