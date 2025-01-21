@@ -65,28 +65,32 @@ const LeaderboardPage = () => {
                 {scores.map((entry, index) => (
                   <div
                     key={entry.id}
-                    className="flex items-center justify-between p-6 bg-gradient-to-r from-[#3B3B3B] to-[#4A4A4A] rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out"
+                    className="flex flex-col sm:flex-row items-start sm:items-center p-6 bg-gradient-to-r from-[#3B3B3B] to-[#4A4A4A] rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out"
                   >
                     {/* Ranking and Username */}
-                    <div className="flex items-center w-full sm:w-1/4">
+                    <div className="flex flex-col sm:flex-row sm:w-1/4 mb-4 sm:mb-0 sm:mr-6">
                       <div className="text-lg font-semibold text-[#FFD700]">
                         #{index + 1}
                       </div>
-                      <div className="text-xl font-semibold text-white ml-4">{entry.userName}</div>
+                      <div className="text-xl font-semibold text-white mt-2 sm:mt-0 sm:ml-4">{entry.userName}</div>
                     </div>
 
-                    {/* Score, Percentage, Date, Difficulty, and Type */}
-                    <div className="w-full sm:w-3/4 flex justify-between items-center mt-4 sm:mt-0">
+                    {/* Score and Percentage (Horizontal Layout for larger screens, vertical on mobile) */}
+                    <div className="w-full sm:w-1/2 text-center mb-4 sm:mb-0 sm:mr-6">
                       <div className="text-lg text-gray-300">
                         <span className="font-medium">Score:</span> {entry.score} / {entry.totalQuestions}
                       </div>
-                      <div className="text-lg text-gray-400">
+                      <div className="text-lg text-gray-400 mt-2 sm:mt-0">
                         <span className="font-medium">Percentage:</span> {entry.percentage.toFixed(2)}%
                       </div>
+                    </div>
+
+                    {/* Date and Preferences (Category, Difficulty, Type) */}
+                    <div className="w-full sm:w-1/4 text-left sm:text-right">
                       <div className="text-sm text-gray-400">
                         <span className="font-medium">Date:</span> {entry.timestamp.toLocaleString()}
                       </div>
-                      <div className="text-sm text-gray-400">
+                      <div className="text-sm text-gray-400 mt-1">
                         <span className="font-medium">Difficulty:</span> {entry.difficulty} |{" "}
                         <span className="font-medium">Type:</span> {entry.type}
                       </div>
