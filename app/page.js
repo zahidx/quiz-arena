@@ -1,9 +1,11 @@
 "use client";
-import Link from "next/link";;
-import { FaListAlt, FaRegCheckCircle, FaTrophy } from "react-icons/fa";
-import { FaStar, FaMedal } from "react-icons/fa"; // Add FaMedal here
+import Link from "next/link";
+import { FaListAlt, FaRegCheckCircle, FaTrophy, FaStar, FaMedal } from "react-icons/fa"; // Add FaMedal here
+import { useState } from "react";
 
 const Home = () => {
+  const [profileCompleted, setProfileCompleted] = useState(false); // Add this in your app's global state.
+
   return (
     <div className="min-h-screen flex flex-col justify-between dark:text-white bg-background">
       {/* Hero Section */}

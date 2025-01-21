@@ -1,5 +1,5 @@
-"use client";
-import { useRouter } from 'next/router';
+"use client"; // Ensuring client-side behavior
+import { useRouter } from "next/navigation"; // Correct import for App Router
 import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -146,8 +146,6 @@ const Quiz = () => {
     }
   }, [timeUp]);
 
-
-
   // Score chart data
   const scorePercentage = (score / questions.length) * 100;
 
@@ -173,7 +171,7 @@ const Quiz = () => {
         fill: true,
       },
     ],
-  };
+  }
 
   return (
     <div className="container mx-auto py-10 px-4 text-center bg-[#252B4D] dark:bg-[#0E1628] dark:text-white">

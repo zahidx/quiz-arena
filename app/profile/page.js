@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore"; // Updated for document manipulation
 import { db } from "../components/Firebase"; // Import Firestore instance from Firebase.js
+import { useRouter } from "next/navigation"; // For navigation to the quiz page
 
 const ProfilePage = () => {
   // State to manage user input (Name, Age, Phone) and other components
@@ -12,6 +13,21 @@ const ProfilePage = () => {
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false); // To manage saving state
   const [userProfile, setUserProfile] = useState(null); // To store fetched user profile
+  const [userId, setUserId] = useState(null); // User identification (for example from Firebase Auth)
+  const router = useRouter(); // For redirecting after completion
+
+  // Simulate userId for now (You can replace this with actual authentication logic)
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId"); // Get userId from localStorage (can be set during login)
+    if (!storedUserId) {
+      // Generate a random userId for testing (replace this logic with real userId retrieval from Firebase Auth)
+      const newUserId = "user" + new Date().getTime();
+      localStorage.setItem("userId", newUserId);
+      setUserId(newUserId);
+    } else {
+      setUserId(storedUserId);
+    }
+  }, []);
 
   // Handle saving user profile to Firestore
   const handleSave = async () => {
@@ -23,11 +39,12 @@ const ProfilePage = () => {
 
     setIsSaving(true); // Set saving state to true when saving
     try {
-      // Save profile information in Firestore
-      await addDoc(collection(db, "profiles"), {
+      // Save profile information in Firestore (profileCompleted set to true)
+      await setDoc(doc(db, "profiles", userId), {
         name,
         age: parseInt(age, 10), // Convert age to number
         phone,
+        profileCompleted: true, // Mark the profile as completed
         timestamp: new Date(),
       });
       setMessage("Profile saved successfully!"); // Show success message
@@ -35,6 +52,9 @@ const ProfilePage = () => {
       setAge("");
       setPhone("");
       fetchUserProfile(); // Fetch the profile to show
+      
+      // Reload the page after saving
+      window.location.reload();
     } catch (error) {
       console.error("Error saving profile:", error);
       setMessage("Failed to save profile. Please try again."); // Show error message if saving fails
@@ -46,13 +66,10 @@ const ProfilePage = () => {
   // Fetch user profile from Firestore
   const fetchUserProfile = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "profiles"));
-      const profiles = [];
-      querySnapshot.forEach((doc) => {
-        profiles.push(doc.data());
-      });
-      if (profiles.length > 0) {
-        setUserProfile(profiles[0]); // Set user profile if data exists
+      const docRef = doc(db, "profiles", userId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setUserProfile(docSnap.data()); // Set user profile if data exists
       } else {
         setUserProfile(null); // No data found
       }
@@ -61,15 +78,22 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle profile completion action
+  const handleProfileCompletion = () => {
+    router.push("/quiz"); // Navigate to quiz page after profile is completed
+  };
+
   // Fetch the user profile when the page loads
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (userId) {
+      fetchUserProfile();
+    }
+  }, [userId]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-6xl gap-8"> {/* Horizontal Flex Layout */}
-        
+
         {/* Section 1: User Input */}
         <div className="w-1/2 bg-white p-8 rounded-lg shadow-md">
           <h1 className="text-2xl font-bold mb-6 text-center">Create Profile</h1>
@@ -124,32 +148,39 @@ const ProfilePage = () => {
           </button>
         </div>
 
-{/* Section 2: Fetch and Show User Profile */}
-<div className="w-full md:w-1/2 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
-  <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">User Profile</h2>
-  {userProfile ? (
-    <div className="space-y-6">
-      {/* User Profile Information */}
-      <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
-        <span>Name:</span>
-        <span className="font-normal text-gray-900">{userProfile.name}</span>
-      </div>
-      <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
-        <span>Age:</span>
-        <span className="font-normal text-gray-900">{userProfile.age}</span>
-      </div>
-      <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
-        <span>Phone:</span>
-        <span className="font-normal text-gray-900">{userProfile.phone}</span>
-      </div>
-    </div>
-  ) : (
-    <div className="text-center text-xl font-semibold text-red-500">No data found for you.</div>
-  )}
-</div>
+        {/* Section 2: Fetch and Show User Profile */}
+        <div className="w-full md:w-1/2 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">User Profile</h2>
+          {userProfile ? (
+            <div className="space-y-6">
+              {/* User Profile Information */}
+              <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
+                <span>Name:</span>
+                <span className="font-normal text-gray-900">{userProfile.name}</span>
+              </div>
+              <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
+                <span>Age:</span>
+                <span className="font-normal text-gray-900">{userProfile.age}</span>
+              </div>
+              <div className="flex justify-between text-lg font-medium text-gray-700 bg-gray-100 rounded-lg p-2">
+                <span>Phone:</span>
+                <span className="font-normal text-gray-900">{userProfile.phone}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center text-xl font-semibold text-red-500">No data found for you.</div>
+          )}
+        </div>
 
-
-        
+        {/* Complete Profile Button */}
+        {userProfile && !userProfile.profileCompleted && (
+          <button
+            onClick={handleProfileCompletion}
+            className="py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-700"
+          >
+            Complete Profile
+          </button>
+        )}
       </div>
     </div>
   );

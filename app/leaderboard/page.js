@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../components/Firebase"; // Assuming Firebase.js is configured
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { FaSpinner } from 'react-icons/fa';
-
 
 const LeaderboardPage = () => {
   const [users, setUsers] = useState([]);
@@ -14,7 +13,7 @@ const LeaderboardPage = () => {
     const fetchUsers = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "profiles"));
-        const userList = querySnapshot.docs.map((doc) => doc.data());
+        const userList = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         setUsers(userList);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -62,58 +61,76 @@ const LeaderboardPage = () => {
     }
   };
 
+  // Function to delete user
+  const deleteUser = async (id) => {
+    try {
+      const userDoc = doc(db, "profiles", id);
+      await deleteDoc(userDoc);
+      setUsers(users.filter(user => user.id !== id)); // Remove the deleted user from the state
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen py-16 px-8 bg-[#232B4C] text-white">
-  <div className="max-w-5xl mx-auto  p-10 rounded-xl ">
-    <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#fc9219] to-[#FF9A25] mb-12">
-      Leaderboard
-    </h1>
+      <div className="max-w-5xl mx-auto p-10 rounded-xl">
+        <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#fc9219] to-[#FF9A25] mb-12">
+          Leaderboard
+        </h1>
 
-    {loading ? (
-  <div className="flex justify-center items-center">
-    <FaSpinner className="animate-spin text-4xl text-blue-500" />
-    <p className="text-center text-gray-400 text-lg ml-4">Loading...</p>
-  </div>
-) : (
-      <>
-        {users.length > 0 ? (
-          <div className="space-y-2">
-            {users.map((user, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-2 bg-gradient-to-r from-[#3b3b3b] to-[#4a4a4a] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
-              >
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center">
-                    {/* Font Awesome Icon */}
-                    <i className="fas fa-user-circle text-3xl text-gray-400"></i>
-                  </div>
-                  <div className="text-lg font-semibold text-white">
-                    {user.name}
-                  </div>
-                </div>
-
-                <div className="text-gray-300 text-md">
-                  {maskPhoneNumber(user.phone)}
-                </div>
-                <div className="text-sm text-gray-400">
-                  {timeAgo(user.timestamp.toDate())}
-                </div>
-
-                <div className="text-lg font-bold text-green-400">
-                  #{index + 1}
-                </div>
-              </div>
-            ))}
+        {loading ? (
+          <div className="flex justify-center items-center">
+            <FaSpinner className="animate-spin text-4xl text-blue-500" />
+            <p className="text-center text-gray-400 text-lg ml-4">Loading...</p>
           </div>
         ) : (
-          <p className="text-center text-red-500 text-xl font-semibold">No users found.</p>
-        )}
-      </>
-    )}
-  </div>
-</div>
+          <>
+            {users.length > 0 ? (
+              <div className="space-y-2">
+                {users.map((user, index) => (
+                  <div
+                    key={user.id}
+                    className="flex items-center justify-between p-2 bg-gradient-to-r from-[#3b3b3b] to-[#4a4a4a] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 rounded-full bg-blue-900 flex items-center justify-center">
+                        {/* Font Awesome Icon */}
+                        <i className="fas fa-user-circle text-3xl text-gray-400"></i>
+                      </div>
+                      <div className="text-lg font-semibold text-white">
+                        {user.name}
+                      </div>
+                    </div>
 
+                    <div className="text-gray-300 text-md">
+                      {maskPhoneNumber(user.phone)}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {timeAgo(user.timestamp.toDate())}
+                    </div>
+
+                    <div className="text-lg font-bold text-green-400">
+                      #{index + 1}
+                    </div>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => deleteUser(user.id)}
+                      className="text-red-500 hover:text-red-700 transition-all duration-200"
+                    >
+                      <i className="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-red-500 text-xl font-semibold">No users found.</p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
