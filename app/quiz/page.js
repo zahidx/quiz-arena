@@ -1,6 +1,8 @@
-"use client"; // Ensuring client-side behavior
-import { useRouter } from "next/navigation"; // Correct import for App Router
+"use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { db } from "../components/Firebase";
+import { doc, getDoc, addDoc, collection } from "firebase/firestore";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -17,7 +19,7 @@ import {
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, PointElement, LineElement);
 
 const Quiz = () => {
-
+  const [userName, setUserName] = useState("");
   const [preferences, setPreferences] = useState({
     difficulty: "any",
     type: "any",
@@ -29,12 +31,12 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [timeUp, setTimeUp] = useState(false); // Time-up state
-  const [timeLeft, setTimeLeft] = useState(30); // Timer for each question, starting from 30 seconds
+  const [timeUp, setTimeUp] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [loading, setLoading] = useState(true);
 
   const API_BASE = "https://opentdb.com/api.php?amount=40&encode=url3986";
 
-  // Build the API URL based on user preferences
   const buildApiUrl = () => {
     let url = `${API_BASE}&category=${preferences.category}`;
     if (preferences.difficulty !== "any") {
@@ -46,21 +48,33 @@ const Quiz = () => {
     return url;
   };
 
-  // Fetch and process questions
+  const fetchUserName = async () => {
+    try {
+      const userDocRef = doc(db, "profiles", "user1737448261467"); // Hardcoded user ID for testing
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        setUserName(userDoc.data().name); // Assuming "name" is the field storing the user's name
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchQuestions = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(buildApiUrl());
       const data = await response.json();
-
-      // Decode and randomize questions
       const decodedQuestions = data.results.map((question) => ({
         ...question,
         question: decodeURIComponent(question.question),
         correct_answer: decodeURIComponent(question.correct_answer),
-        incorrect_answers: question.incorrect_answers.map((answer) =>
-          decodeURIComponent(answer)
-        ),
+        incorrect_answers: question.incorrect_answers.map((answer) => decodeURIComponent(answer)),
       }));
       const randomizedQuestions = decodedQuestions
         .sort(() => Math.random() - 0.5)
@@ -74,17 +88,14 @@ const Quiz = () => {
     }
   };
 
-  // Handle preferences change
   const handlePreferenceChange = (key, value) => {
     setPreferences((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Start the quiz
   const startQuiz = () => {
     fetchQuestions();
   };
 
-  // Shuffle options (correct + incorrect answers)
   const getShuffledOptions = () => {
     const currentQuestion = questions[currentQuestionIndex];
     const allOptions = [
@@ -94,90 +105,102 @@ const Quiz = () => {
     return allOptions.sort(() => Math.random() - 0.5);
   };
 
-  // Handle option selection
   const handleOptionSelect = (option) => {
     setSelectedOption(option);
   };
 
-  // Handle the "Next" or "Finish" button click
   const handleNextQuestion = () => {
     const currentQuestion = questions[currentQuestionIndex];
 
-    // If no option is selected, treat it as a wrong answer
     if (selectedOption === null) {
-      setScore((prevScore) => prevScore - 1); // Subtract a point for not selecting an answer
+      setScore((prevScore) => prevScore - 1);
     } else if (selectedOption === currentQuestion.correct_answer) {
-      setScore((prevScore) => prevScore + 1); // Increment score for correct answer
+      setScore((prevScore) => prevScore + 1);
     }
 
-    // Move to the next question or finish the quiz
     if (currentQuestionIndex + 1 < questions.length) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-      setSelectedOption(null); // Reset selected option
-      setTimeLeft(30); // Reset the timer for the next question
-      setTimeUp(false); // Reset the time-up state
+      setSelectedOption(null);
+      setTimeLeft(30);
+      setTimeUp(false);
     } else {
-      setQuizCompleted(true); // End the quiz
+      setQuizCompleted(true);
+      saveScoreToDatabase(); // Save score when the quiz ends
     }
   };
 
-  // Handle time-up event
   const handleTimeUp = () => {
-    setTimeUp(true); // Trigger time-up state
+    setTimeUp(true);
   };
 
-  // Timer effect to countdown for each question
   useEffect(() => {
+    fetchUserName(); // Fetch the user's name when the component is mounted
     if (timeLeft === 0) {
-      handleTimeUp(); // Trigger time-up when timer hits zero
+      handleTimeUp();
       return;
     }
 
     if (!timeUp) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000); // Countdown every second
-      return () => clearTimeout(timer); // Cleanup the timer on effect cleanup
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
     }
   }, [timeLeft, timeUp]);
 
-  // Automatically go to the next question when time is up
   useEffect(() => {
     if (timeUp) {
-      handleNextQuestion(); // Go to next question after time-up
+      handleNextQuestion();
     }
   }, [timeUp]);
 
-  // Score chart data
   const scorePercentage = (score / questions.length) * 100;
 
   const chartData = {
-    labels: ['Score'],
+    labels: ["Score"],
     datasets: [
       {
-        label: 'Your Score',
+        label: "Your Score",
         data: [score],
-        borderColor: '#28a745',
-        backgroundColor: '#28a745',
+        borderColor: "#28a745",
+        backgroundColor: "#28a745",
         borderWidth: 2,
         tension: 0.3,
         fill: true,
       },
       {
-        label: 'Total Questions',
+        label: "Total Questions",
         data: [questions.length],
-        borderColor: '#6c757d',
-        backgroundColor: '#6c757d',
+        borderColor: "#6c757d",
+        backgroundColor: "#6c757d",
         borderWidth: 2,
         tension: 0.3,
         fill: true,
       },
     ],
-  }
+  };
+
+  const saveScoreToDatabase = async () => {
+    try {
+      await addDoc(collection(db, "quiz_scores"), {
+        userName: userName, // Add the user's name
+        score: score,
+        totalQuestions: questions.length,
+        percentage: scorePercentage,
+        timestamp: new Date(),
+        preferences,
+      });
+      console.log("Score saved to database with user name");
+    } catch (error) {
+      console.error("Error saving score to database:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto py-10 px-4 text-center bg-[#252B4D] dark:bg-[#0E1628] dark:text-white">
       <h1 className="text-5xl font-bold text-[#FF8C2E] dark:text-indigo-400 mb-6">
         Quiz Arena
       </h1>
+
+      <h2 className="text-3xl text-white">Welcome, {userName}!</h2>
 
       {isLoading ? (
         <p className="text-lg text-gray-600">Loading questions...</p>
