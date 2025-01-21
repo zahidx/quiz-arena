@@ -26,7 +26,6 @@ const LeaderboardPage = () => {
             percentage: data.percentage || 0,
             timestamp: data.timestamp.toDate(), // Convert Firestore timestamp
             preferences: data.preferences || {},
-            category: data.preferences?.category || "Unknown Category",
             difficulty: data.preferences?.difficulty || "Unknown Difficulty",
             type: data.preferences?.type || "Unknown Type",
           };
@@ -68,25 +67,29 @@ const LeaderboardPage = () => {
                     key={entry.id}
                     className="flex items-center justify-between p-6 bg-gradient-to-r from-[#3B3B3B] to-[#4A4A4A] rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out"
                   >
-                    <div className="flex items-center space-x-4">
+                    {/* Ranking and Username */}
+                    <div className="flex items-center w-full sm:w-1/4">
                       <div className="text-lg font-semibold text-[#FFD700]">
                         #{index + 1}
                       </div>
-                      <div className="text-xl font-semibold text-white">{entry.userName}</div>
+                      <div className="text-xl font-semibold text-white ml-4">{entry.userName}</div>
                     </div>
-                    <div className="text-lg text-gray-300">
-                      <span className="font-medium">Score:</span> {entry.score} / {entry.totalQuestions}
-                    </div>
-                    <div className="text-lg text-gray-400">
-                      <span className="font-medium">Percentage:</span> {entry.percentage.toFixed(2)}%
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      <span className="font-medium">Date:</span> {entry.timestamp.toLocaleString()}
-                    </div>
-                    <div className="text-sm text-gray-400">
-                      <span className="font-medium">Category:</span> {entry.category} |{" "}
-                      <span className="font-medium">Difficulty:</span> {entry.difficulty} |{" "}
-                      <span className="font-medium">Type:</span> {entry.type}
+
+                    {/* Score, Percentage, Date, Difficulty, and Type */}
+                    <div className="w-full sm:w-3/4 flex justify-between items-center mt-4 sm:mt-0">
+                      <div className="text-lg text-gray-300">
+                        <span className="font-medium">Score:</span> {entry.score} / {entry.totalQuestions}
+                      </div>
+                      <div className="text-lg text-gray-400">
+                        <span className="font-medium">Percentage:</span> {entry.percentage.toFixed(2)}%
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        <span className="font-medium">Date:</span> {entry.timestamp.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-400">
+                        <span className="font-medium">Difficulty:</span> {entry.difficulty} |{" "}
+                        <span className="font-medium">Type:</span> {entry.type}
+                      </div>
                     </div>
                   </div>
                 ))}
