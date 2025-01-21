@@ -64,7 +64,7 @@ const LeaderboardPage = () => {
   return (
     <div className="min-h-screen py-16 px-8 bg-[#232B4C] text-white">
   <div className="max-w-5xl mx-auto  p-10 rounded-xl ">
-    <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#1D4ED8] to-[#9333EA] mb-12">
+    <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#fc9219] to-[#FF9A25] mb-12">
       Leaderboard
     </h1>
 
@@ -96,7 +96,7 @@ const LeaderboardPage = () => {
                   {timeAgo(user.timestamp.toDate())}
                 </div>
 
-                <div className="text-sm font-bold text-yellow-400">
+                <div className="text-lg font-bold text-green-400">
                   #{index + 1}
                 </div>
               </div>
