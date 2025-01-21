@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../components/Firebase"; // Assuming Firebase.js is configured
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FaSpinner } from 'react-icons/fa';
 
 
 const LeaderboardPage = () => {
@@ -69,8 +70,11 @@ const LeaderboardPage = () => {
     </h1>
 
     {loading ? (
-      <p className="text-center text-gray-400 text-lg animate-pulse">Loading...</p>
-    ) : (
+  <div className="flex justify-center items-center">
+    <FaSpinner className="animate-spin text-4xl text-blue-500" />
+    <p className="text-center text-gray-400 text-lg ml-4">Loading...</p>
+  </div>
+) : (
       <>
         {users.length > 0 ? (
           <div className="space-y-2">
