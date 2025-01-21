@@ -18,11 +18,11 @@ const Home = () => {
           Test your knowledge with exciting quizzes. Challenge yourself and
           others to top the leaderboard!
         </p>
-        <Link href="/quiz">
+        <Link href="/profile">
           <button className="bg-gradient-to-r from-[#1E2A47] to-[#4C2F72] text-white px-6 py-3 rounded-md shadow-xl transform hover:scale-110 hover:opacity-90 transition-all duration-300 ease-in-out relative overflow-hidden group">
             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#4C2F72] to-[#1E2A47] opacity-50 group-hover:opacity-0 transition-all duration-500 ease-in-out"></span>
             <span className="relative z-10 text-lg font-semibold">
-              Start Quiz
+              Join Now!
             </span>
             <span className="absolute top-0 left-0 w-0 h-full bg-white opacity-30 transition-all duration-300 ease-in-out group-hover:w-full"></span>
           </button>
