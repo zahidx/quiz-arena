@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from 'next/router';
 import { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -16,6 +17,7 @@ import {
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, PointElement, LineElement);
 
 const Quiz = () => {
+
   const [preferences, setPreferences] = useState({
     difficulty: "any",
     type: "any",
@@ -144,6 +146,8 @@ const Quiz = () => {
     }
   }, [timeUp]);
 
+
+
   // Score chart data
   const scorePercentage = (score / questions.length) * 100;
 
@@ -224,12 +228,13 @@ const Quiz = () => {
         </div>
   
         <div>
-          <button
-            onClick={handleNextQuestion}
-            className="py-3 px-6 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-white text-lg font-semibold shadow-md transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
-          >
-            Start New Quiz
-          </button>
+        {/* <button
+      onClick={() => router.push('/')}
+      className="py-3 px-6 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-white text-lg font-semibold shadow-md transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+    >
+      Go to Home
+    </button> */}
+
         </div>
       </div>
 
