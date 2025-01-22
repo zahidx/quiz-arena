@@ -40,7 +40,7 @@ const Home = () => {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {/* First Card: Choose Category */}
-          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-3s dark:bg-[#1F2937] dark:text-white">
+          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-3s dark:bg-[#092635] dark:text-white">
             <div className="flex justify-center items-center text-6xl text-[#4C2F72] mb-4 dark:text-white">
               <FaListAlt />
             </div>
@@ -53,7 +53,7 @@ const Home = () => {
           </div>
 
           {/* Second Card: Answer Questions */}
-          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-4s dark:bg-[#1F2937] dark:text-white">
+          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-4s dark:bg-[#092635] dark:text-white">
             <div className="flex justify-center items-center text-6xl text-[#4C2F72] mb-4 dark:text-white">
               <FaRegCheckCircle />
             </div>
@@ -66,7 +66,7 @@ const Home = () => {
           </div>
 
           {/* Third Card: Compete & Win */}
-          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-5s dark:bg-[#1F2937] dark:text-white">
+          <div className="bg-white text-center py-8 px-6 rounded-lg shadow-xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300 animate__animated animate__fadeIn animate__delay-5s dark:bg-[#092635] dark:text-white">
             <div className="flex justify-center items-center text-6xl text-[#4C2F72] mb-4 dark:text-white">
               <FaTrophy />
             </div>
@@ -92,7 +92,7 @@ const Home = () => {
 
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 animate__animated animate__fadeIn animate__delay-3s pl-20 pr-20">
     {/* Top Rank Card */}
-    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#0F1629] text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
+    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#092635] dark:to-[#092b3b]text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
       <div className="flex justify-center items-center text-6xl text-white mb-4">
         <FaTrophy />
       </div>
@@ -102,7 +102,7 @@ const Home = () => {
     </div>
 
     {/* Mid Rank Card */}
-    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#0F1629] text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
+    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#092635] dark:to-[#092b3b]text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
       <div className="flex justify-center items-center text-6xl text-white mb-4">
         <FaStar />
       </div>
@@ -112,7 +112,7 @@ const Home = () => {
     </div>
 
     {/* Bottom Rank Card */}
-    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#1F2937] dark:to-[#0F1629] text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
+    <div className="bg-gradient-to-r from-[#E69A10] to-[#D1A100] dark:bg-gradient-to-r dark:from-[#092635] dark:to-[#092b3b]text-center py-8 px-6 rounded-lg shadow-2xl transform hover:scale-105 hover:shadow-2xl transition-all duration-300">
       <div className="flex justify-center items-center text-6xl text-white mb-4">
         <FaMedal />
       </div>

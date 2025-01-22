@@ -47,66 +47,70 @@ const LeaderboardPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#1E2A47] text-white py-16 px-8">
-      <div className="max-w-6xl mx-auto bg-[#232B4C] p-12 rounded-xl shadow-lg">
-        <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FC9219] to-[#FF9A25] mb-8">
-          Leaderboard
-        </h1>
+    <div className="min-h-screen bg-[#232B4C] text-white py-12 px-4 sm:py-16 sm:px-8">
+  <div className="max-w-6xl mx-auto bg-[#232B4C] p-6 sm:p-12 rounded-xl shadow-lg">
+    <h1 className="text-3xl sm:text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-[#FC9219] to-[#FF9A25] mb-6 sm:mb-8">
+      Leaderboard
+    </h1>
 
-        {loading ? (
-          <div className="flex justify-center items-center">
-            <FaSpinner className="animate-spin text-4xl text-blue-500" />
-            <p className="text-center text-gray-400 text-lg ml-4">Loading...</p>
-          </div>
-        ) : (
-          <>
-            {scores.length > 0 ? (
-              <div className="space-y-6">
-                {scores.map((entry, index) => (
-                  <div
-                    key={entry.id}
-                    className="flex flex-col sm:flex-row items-start sm:items-center p-6 bg-gradient-to-r from-[#3B3B3B] to-[#4A4A4A] rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out"
-                  >
-                    {/* Ranking and Username */}
-                    <div className="flex flex-col sm:flex-row sm:w-1/4 mb-4 sm:mb-0 sm:mr-6">
-                      <div className="text-lg font-semibold text-[#FFD700]">
-                        #{index + 1}
-                      </div>
-                      <div className="text-xl font-semibold text-white mt-2 sm:mt-0 sm:ml-4">{entry.userName}</div>
+    {loading ? (
+      <div className="flex justify-center items-center">
+        <FaSpinner className="animate-spin text-4xl text-blue-500" />
+        <p className="text-center text-gray-400 text-lg ml-4">Loading...</p>
+      </div>
+    ) : (
+      <>
+        {scores.length > 0 ? (
+          <div className="space-y-6">
+            {scores.map((entry, index) => (
+              <div
+                key={entry.id}
+                className="p-4 bg-gradient-to-r from-[#1F2A40] to-[#2B3C5A] rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out"
+              >
+                {/* Card Content */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center">
+                  {/* Ranking and Username */}
+                  <div className="flex flex-col w-full sm:w-1/4 mb-4 sm:mb-0">
+                    <div className="text-lg font-semibold text-[#00ff51]">#{index + 1}</div>
+                    <div className="text-lg sm:text-xl font-semibold text-white mt-1">{entry.userName}</div>
+                  </div>
+
+                  {/* Score and Percentage */}
+                  <div className="flex flex-col w-full sm:w-1/3 mb-4 sm:mb-0">
+                    <div className="text-gray-300 text-sm sm:text-base">
+                      <span className="font-medium">Score:</span> {entry.score} / {entry.totalQuestions}
                     </div>
-
-                    {/* Score and Percentage (Horizontal Layout for larger screens, vertical on mobile) */}
-                    <div className="w-full sm:w-1/2 text-center mb-4 sm:mb-0 sm:mr-6">
-                      <div className="text-lg text-gray-300">
-                        <span className="font-medium">Score:</span> {entry.score} / {entry.totalQuestions}
-                      </div>
-                      <div className="text-lg text-gray-400 mt-2 sm:mt-0">
-                        <span className="font-medium">Percentage:</span> {entry.percentage.toFixed(2)}%
-                      </div>
-                    </div>
-
-                    {/* Date and Preferences (Category, Difficulty, Type) */}
-                    <div className="w-full sm:w-1/4 text-left sm:text-right">
-                      <div className="text-sm text-gray-400">
-                        <span className="font-medium">Date:</span> {entry.timestamp.toLocaleString()}
-                      </div>
-                      <div className="text-sm text-gray-400 mt-1">
-                        <span className="font-medium">Difficulty:</span> {entry.difficulty} |{" "}
-                        <span className="font-medium">Type:</span> {entry.type}
-                      </div>
+                    <div className="text-gray-400 text-sm sm:text-base mt-1">
+                      <span className="font-medium">Percentage:</span> {entry.percentage.toFixed(2)}%
                     </div>
                   </div>
-                ))}
+
+                  {/* Date and Preferences */}
+                  <div className="flex flex-col w-full sm:w-1/3">
+                    <div className="text-gray-400 text-sm sm:text-base">
+                      <span className="font-medium">Date:</span> {entry.timestamp.toLocaleString()}
+                    </div>
+                    <div className="text-gray-400 text-sm sm:text-base mt-1">
+                      <span className="font-medium">Difficulty:</span> {entry.difficulty}
+                      {" | "}
+                      <span className="font-medium">Type:</span> {entry.type}
+                    </div>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <p className="text-center text-red-500 text-xl font-semibold">
-                No Scores Found
-              </p>
-            )}
-          </>
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-red-500 text-lg sm:text-xl font-semibold">
+            No Scores Found
+          </p>
         )}
-      </div>
-    </div>
+      </>
+    )}
+  </div>
+</div>
+
+
   );
 };
 

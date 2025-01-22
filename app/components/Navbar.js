@@ -71,7 +71,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#2f0539] dark:to-[#0d1323] p-4 shadow-lg">
+    <nav className="bg-gradient-to-r from-[#0E1628] to-[#380643] dark:bg-gradient-to-r dark:from-[#0E0C35] dark:to-[#0d1323] p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <div className="text-white font-semibold text-xl animate-move">QuizArena</div>
 
@@ -135,8 +135,7 @@ const Navbar = () => {
             <li>
               <span
                 onClick={handleQuizNavigation}
-                className="text-white hover:text-gray-300 dark:text-gray-300 dark:hover:text-white"
-                onClick={toggleMenu}
+                className="text-white hover:text-gray-300 dark:text-gray-300 dark:hover:text-white cursor-pointer"
               >
                 Quiz
               </span>
